@@ -31,7 +31,7 @@ public class CustomerController {
         customerEntity.setEmail(signupCustomerRequest.getEmailAddress());
         customerEntity.setContactNumber(signupCustomerRequest.getContactNumber());
         customerEntity.setPassword(signupCustomerRequest.getPassword());
-        customerEntity.setSalt("1234abc");
+//        customerEntity.setSalt("1234abc");
 
 
         final CustomerEntity createdCustomerEntity = customerService.saveCustomer(customerEntity);
