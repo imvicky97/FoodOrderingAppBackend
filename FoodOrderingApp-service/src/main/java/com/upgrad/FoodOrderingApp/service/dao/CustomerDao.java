@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 @Repository
 public class CustomerDao {
@@ -17,5 +18,16 @@ public class CustomerDao {
         entityManager.persist(customerEntity);
         return customerEntity;
 
+    }
+    /**
+     * @param contact_number
+     * @return User with the given contact_number
+     */
+    public CustomerEntity getUserByContactNumber(final String contact_number) {
+        try {
+            return entityManager.createNamedQuery("getUserByContactNumber", CustomerEntity.class).setParameter("contact_number", contact_number).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
     }
 }
