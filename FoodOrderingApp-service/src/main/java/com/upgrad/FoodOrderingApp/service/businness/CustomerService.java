@@ -18,11 +18,23 @@ public class CustomerService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity saveCustomer(CustomerEntity customerEntity) throws SignUpRestrictedException {
+        if(!isCustomerEntittyValid(customerEntity)){
+            throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
+        }
 
         CustomerEntity exsitingContactNumber = customerDao.getUserByContactNumber(customerEntity.getContactNumber());
         if(exsitingContactNumber != null) {
             throw new SignUpRestrictedException("SGR-001","This contact number is already registered! Try other contact number.");
         }
         return customerDao.createUser(customerEntity);
+    }
+    private boolean isCustomerEntittyValid(CustomerEntity customerEntity) {
+        if(customerEntity.getFirstName()!=null &&
+                customerEntity.getEmail()!= null &&
+                customerEntity.getContactNumber()!=null &&
+                customerEntity.getPassword()!= null)
+            return true;
+        return false;
+
     }
 }
