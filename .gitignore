@@ -1,2 +1,8 @@
 
 .idea/
+FoodOrderingApp-api/target/
+FoodOrderingApp-db/target/
+FoodOrderingApp-service/target/
+FoodOrderingApp-api/src/test
+FoodOrderingApp-api/src/test/java/com/upgrad
+FoodOrderingApp-api/src/test/java/com/upgrad/FoodOrderingApp/api/controller/
