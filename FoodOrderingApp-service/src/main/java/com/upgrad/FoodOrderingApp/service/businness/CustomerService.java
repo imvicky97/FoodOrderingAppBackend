@@ -26,6 +26,9 @@ public class CustomerService {
             throw new SignUpRestrictedException("SGR-002","Invalid email-id format!");
 
         }
+        if(!isContactNumberValid(customerEntity.getContactNumber())) {
+            throw new SignUpRestrictedException("SGR-003","Invalid contact number!");
+        }
 
         CustomerEntity exsitingContactNumber = customerDao.getUserByContactNumber(customerEntity.getContactNumber());
         if(exsitingContactNumber != null) {
@@ -46,5 +49,9 @@ public class CustomerService {
     private boolean isEmailAddressValid(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
+    }
+
+    private boolean isContactNumberValid(String phoneNumber) {
+        return (phoneNumber.matches("\\d{10}"));
     }
 }
