@@ -17,6 +17,9 @@ public class CustomerService {
     @Autowired
     private CustomerDao customerDao;
 
+    @Autowired
+    private PasswordCryptographyProvider passwordCryptographyProvider;
+
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity saveCustomer(CustomerEntity customerEntity) throws SignUpRestrictedException {
         if(!isCustomerEntittyValid(customerEntity)){
@@ -33,6 +36,10 @@ public class CustomerService {
         if(!isPasswordString(customerEntity.getPassword())) {
             throw new SignUpRestrictedException("SGR-004","Weak password!");
         }
+
+        String[] encrptedPassword = passwordCryptographyProvider.encrypt(customerEntity.getPassword());
+        customerEntity.setSalt(encrptedPassword[0]);
+        customerEntity.setPassword(encrptedPassword[1]);
 
         CustomerEntity exsitingContactNumber = customerDao.getUserByContactNumber(customerEntity.getContactNumber());
         if(exsitingContactNumber != null) {
