@@ -30,6 +30,10 @@ public class CustomerService {
             throw new SignUpRestrictedException("SGR-003","Invalid contact number!");
         }
 
+        if(!isPasswordString(customerEntity.getPassword())) {
+            throw new SignUpRestrictedException("SGR-004","Weak password!");
+        }
+
         CustomerEntity exsitingContactNumber = customerDao.getUserByContactNumber(customerEntity.getContactNumber());
         if(exsitingContactNumber != null) {
             throw new SignUpRestrictedException("SGR-001","This contact number is already registered! Try other contact number.");
@@ -53,5 +57,9 @@ public class CustomerService {
 
     private boolean isContactNumberValid(String phoneNumber) {
         return (phoneNumber.matches("\\d{10}"));
+    }
+
+    private boolean isPasswordString(String password) {
+        return (password.matches("^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$"));
     }
 }
