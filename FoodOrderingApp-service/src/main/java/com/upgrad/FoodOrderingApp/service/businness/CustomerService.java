@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
+
 @Transactional
 @Service
 public class CustomerService {
@@ -20,6 +21,10 @@ public class CustomerService {
     public CustomerEntity saveCustomer(CustomerEntity customerEntity) throws SignUpRestrictedException {
         if(!isCustomerEntittyValid(customerEntity)){
             throw new SignUpRestrictedException("SGR-005","Except last name all fields should be filled");
+        }
+        if(!isEmailAddressValid(customerEntity.getEmail())) {
+            throw new SignUpRestrictedException("SGR-002","Invalid email-id format!");
+
         }
 
         CustomerEntity exsitingContactNumber = customerDao.getUserByContactNumber(customerEntity.getContactNumber());
@@ -36,5 +41,10 @@ public class CustomerService {
             return true;
         return false;
 
+    }
+
+    private boolean isEmailAddressValid(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
     }
 }
