@@ -13,7 +13,8 @@ import java.io.Serializable;
 @Table(name = "customer")
 
 @NamedQueries({
-        @NamedQuery(name = "getUserByContactNumber", query = "select u from CustomerEntity u where  u.contact_number = :contact_number")
+        @NamedQuery(name = "getCustomerByContactNumber", query = "select u from CustomerEntity u where  u.contact_number = :contact_number")
+
 })
 public class CustomerEntity  implements  Serializable{
 
