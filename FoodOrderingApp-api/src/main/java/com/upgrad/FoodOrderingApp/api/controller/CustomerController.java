@@ -49,7 +49,7 @@ public class CustomerController {
     }
     @RequestMapping(method = RequestMethod.POST, path = "/customer/login",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LoginResponse> login(@RequestHeader final String authorization) throws AuthenticationFailedException {
-        String[] decodeArray = new String[2];
+        String[] decodeArray = new String[2]; 
         try {
             byte[] decode = Base64.getDecoder().decode(authorization.split(" ")[1]);
             String decodeText = new String(decode);
