@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +38,26 @@ public class RestaurantController {
         RestaurantListResponse listResponse = new RestaurantListResponse();
 
 
+        buildResponseFromRestaurant(restaurantEntityList, listResponse);
+
+        return new ResponseEntity<>(listResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/restaurant/name/{reastaurant_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<RestaurantListResponse> getRestaurantByName(@PathVariable("reastaurant_name") final String restaurantName) throws RestaurantNotFoundException {
+        List<RestaurantEntity> restaurantEntityList = restaurantService.getRestaurantByRestaurantName(restaurantName);
+        RestaurantListResponse listResponse = new RestaurantListResponse();
+
+        if (restaurantEntityList.isEmpty()) {
+            listResponse.setRestaurants(Collections.emptyList());
+            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>(buildResponseFromRestaurant(restaurantEntityList, listResponse), HttpStatus.OK);
+        }
+    }
+
+    private RestaurantListResponse buildResponseFromRestaurant(List<RestaurantEntity> restaurantEntityList, RestaurantListResponse listResponse) throws RestaurantNotFoundException {
         for (RestaurantEntity restaurantEntity : restaurantEntityList) {
             List<RestaurantCategoryEntity> categoryEntities = restaurantService.getCategoryByRestaurant(restaurantEntity);         //Calling getCategoryByRestaurant
 
@@ -75,8 +96,7 @@ public class RestaurantController {
 
             listResponse.addRestaurantsItem(restaurantListItem);
         }
-
-        return new ResponseEntity(listResponse, HttpStatus.OK);
+        return listResponse;
     }
 
 }

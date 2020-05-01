@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -27,7 +28,15 @@ public class RestaurantDao {
         try {
             return entityManager.createNamedQuery("getCategoryByRestaurant", RestaurantCategoryEntity.class).setParameter("restaurantId", restaurantEntity).getResultList();
         } catch (NoResultException nre) {
-            return null;
+            return Collections.emptyList();
+        }
+    }
+
+    public List<RestaurantEntity> getRestaurantsByName(String restaurantName) {
+        try {
+            return entityManager.createNamedQuery("getRestaurantByName", RestaurantEntity.class).setParameter("restaurantName", "%" + restaurantName + "%").getResultList();
+        } catch (NoResultException nre) {
+            return Collections.emptyList();
         }
     }
 
