@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "restaurant_category")
 @NamedQueries(
         {
-                @NamedQuery(name = "getCategoryByRestaurant", query = "select rc from RestaurantCategoryEntity rc where rc.restaurantId =:restaurantId"),
+                @NamedQuery(name = "getCategoryByRestaurant", query = "select rc from RestaurantCategoryEntity rc where rc.restaurant =:restaurantId"),
                 @NamedQuery(name = "getRestaurantsByCategory", query = "select rc from RestaurantCategoryEntity rc where rc.categoryId =:categoryId")
         }
 )
@@ -32,7 +32,7 @@ public class RestaurantCategoryEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "restaurant_id")
     @NotNull
-    private RestaurantEntity restaurantId;
+    private RestaurantEntity restaurant;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -48,12 +48,12 @@ public class RestaurantCategoryEntity {
         this.id = id;
     }
 
-    public RestaurantEntity getRestaurantId() {
-        return restaurantId;
+    public RestaurantEntity getRestaurant() {
+        return restaurant;
     }
 
     public void setRestaurantId(RestaurantEntity restaurantId) {
-        this.restaurantId = restaurantId;
+        this.restaurant = restaurantId;
     }
 
     public CategoryEntity getCategoryId() {
