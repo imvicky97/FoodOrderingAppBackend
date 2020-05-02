@@ -18,7 +18,8 @@ import java.time.ZonedDateTime;
 
 @NamedQueries({
 //        @NamedQuery(name = "getCustomerAuthByCustomerId", query = "select u from CustomerAuthEntity u where logout_at is not null"),
-        @NamedQuery(name = "customerAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken")
+        @NamedQuery(name = "customerAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken"),
+        @NamedQuery(name = "getUserAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken")
 })
 public class CustomerAuthEntity<UserEntity> {
 
@@ -118,8 +119,8 @@ public class CustomerAuthEntity<UserEntity> {
         return new HashCodeBuilder().append(this).hashCode();
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
+//    @Override
+//    public String toString() {
+//        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+//    }
 }

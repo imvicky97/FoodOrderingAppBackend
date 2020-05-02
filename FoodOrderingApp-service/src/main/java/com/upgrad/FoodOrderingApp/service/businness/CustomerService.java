@@ -5,6 +5,7 @@ import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
+import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,34 @@ public class CustomerService {
 
     @Autowired
     private PasswordCryptographyProvider passwordCryptographyProvider;
+
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public CustomerAuthEntity  logout(String access_token) throws AuthorizationFailedException {
+        CustomerAuthEntity customerAuthEntity = customerAuthDao.getAccessToken(access_token);
+
+
+        if(customerAuthEntity == null)
+            throw new AuthorizationFailedException("ATHR-001","Customer is not Logged in");
+
+        if( customerAuthEntity.getLogoutAt() != null){
+            throw new AuthorizationFailedException("ATHR-002","Customer is logged out. Log in again to access this endpoint");
+
+        }
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        if(customerAuthEntity != null && customerAuthEntity.getExpiresAt().compareTo(now) < 0 ) {
+            throw new AuthorizationFailedException("ATHR-003","Your session is expired. Log in again to access this endpoint.");
+        }
+
+         customerAuthEntity.setLogoutAt(ZonedDateTime.now());
+        customerAuthDao.updateCustomerAuth(customerAuthEntity);
+
+
+        return  customerAuthEntity;
+
+    }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity saveCustomer(CustomerEntity customerEntity) throws SignUpRestrictedException {
@@ -55,6 +84,8 @@ public class CustomerService {
         return customerDao.createUser(customerEntity);
     }
 
+
+    @Transactional(propagation = Propagation.REQUIRED)
     public CustomerAuthEntity authenticate(final String contact_number, final String password) throws AuthenticationFailedException {
         CustomerEntity customerEntity = customerDao.getCustomerByContactNumber(contact_number);
 
@@ -106,4 +137,6 @@ public class CustomerService {
     }
 
 
+//    public Object logout(String s) {
+//    }
 }
