@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @NamedQueries(
         {
                 @NamedQuery(name = "getCategoryById", query = "select c from CategoryEntity c where c.uuid =:uuid"),
-                @NamedQuery(name = "getALLCategories", query = "select c from CategoryEntity c "),
+                @NamedQuery(name = "getALLCategories", query = "select c from CategoryEntity c order by c.categoryName"),
 
         }
 )
