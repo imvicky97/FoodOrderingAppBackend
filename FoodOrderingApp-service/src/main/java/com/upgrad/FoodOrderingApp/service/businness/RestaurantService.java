@@ -6,10 +6,14 @@ import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CategoryItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantCategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
+import com.upgrad.FoodOrderingApp.service.exception.InvalidRatingException;
 import com.upgrad.FoodOrderingApp.service.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,24 +78,44 @@ public class RestaurantService {
     }
 
     public RestaurantEntity getRestaurantByRestaurantId(String restaurantId) throws RestaurantNotFoundException {
-        if(restaurantId == null)
-        {
-            throw new RestaurantNotFoundException("RNF-002","Restaurant id field should not be empty");
+        if (restaurantId == null) {
+            throw new RestaurantNotFoundException("RNF-002", "Restaurant id field should not be empty");
         }
         RestaurantEntity restaurantEntity = restaurantDao.restaurantsByRestaurantId(restaurantId);
-        if(restaurantEntity == null)
-        {
-            throw new RestaurantNotFoundException("RNF-001","No restaurant by this id");
+        if (restaurantEntity == null) {
+            throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
         }
 
         return restaurantEntity;
     }
 
-    public List<CategoryItemEntity> getItemByCategoryId(RestaurantCategoryEntity  restaurantCategoryEntity) throws RestaurantNotFoundException {
+    public List<CategoryItemEntity> getItemByCategoryId(RestaurantCategoryEntity restaurantCategoryEntity) throws RestaurantNotFoundException {
 
         List<CategoryItemEntity> categoryItemEntity = categoryDao.getItemByCategoryId(restaurantCategoryEntity.getCategoryId());
 
         return categoryItemEntity;
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public RestaurantEntity updateRestaurantRating(RestaurantEntity restaurantEntity, Double cu) throws AuthorizationFailedException, RestaurantNotFoundException, InvalidRatingException {
+
+
+        if (restaurantEntity.getId() == null) {
+            throw new RestaurantNotFoundException("RNF-002", "Restaurant id field should not be empty");
+        }
+
+        if (restaurantEntity.getCustomerRating() == null || (restaurantEntity.getCustomerRating() < 1 && restaurantEntity.getCustomerRating() > 5)) {
+            throw new InvalidRatingException("IRE-001", "Restaurant should be in the range of 1 to 5");
+        }
+
+        RestaurantEntity entity = restaurantDao.restaurantsByRestaurantId(restaurantEntity.getUuid());
+        if (entity.getId().equals(restaurantEntity.getId())) {
+            restaurantEntity.setCustomerRating(restaurantEntity.getCustomerRating());
+            restaurantEntity.setNumberCustomersRated(entity.getNumberCustomersRated() + 1);
+            return restaurantDao.updateRestaurantEntity(restaurantEntity);
+        }
+        return restaurantEntity;
     }
 
 
