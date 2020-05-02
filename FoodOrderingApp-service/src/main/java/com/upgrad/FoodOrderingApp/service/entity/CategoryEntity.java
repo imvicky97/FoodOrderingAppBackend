@@ -10,13 +10,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
 @NamedQueries(
         {
                 @NamedQuery(name = "getCategoryById", query = "select c from CategoryEntity c where c.uuid =:uuid"),
-                @NamedQuery(name = "getALLCategories", query = "select c from CategoryEntity c "),
+                @NamedQuery(name = "getALLCategories", query = "select c from CategoryEntity c order by c.categoryName"),
 
         }
 )
@@ -34,7 +35,6 @@ public class CategoryEntity {
     @Column(name = "category_name")
     @Size(max = 255)
     private String categoryName;
-
 
     public Integer getId() {
         return id;
@@ -59,4 +59,5 @@ public class CategoryEntity {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
+
 }

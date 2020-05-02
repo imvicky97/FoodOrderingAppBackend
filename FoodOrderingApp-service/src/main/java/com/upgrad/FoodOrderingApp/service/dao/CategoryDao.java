@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -27,6 +28,14 @@ public class CategoryDao {
     public List<CategoryItemEntity> getItemByCategoryId(CategoryEntity categoryEntity) {
         try {
             return entityManager.createNamedQuery("getItemByCategoryId", CategoryItemEntity.class).setParameter("categoryId", categoryEntity).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public TypedQuery<CategoryEntity> getAllCategory() {
+        try {
+            return entityManager.createNamedQuery("getALLCategories", CategoryEntity.class);
         } catch (NoResultException nre) {
             return null;
         }
