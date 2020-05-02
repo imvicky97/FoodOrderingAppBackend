@@ -1,11 +1,15 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
+import com.upgrad.FoodOrderingApp.api.model.CategoryList;
 import com.upgrad.FoodOrderingApp.api.model.ErrorResponse;
+import com.upgrad.FoodOrderingApp.api.model.ItemList;
+import com.upgrad.FoodOrderingApp.api.model.RestaurantDetailsResponse;
 import com.upgrad.FoodOrderingApp.api.model.RestaurantDetailsResponseAddress;
 import com.upgrad.FoodOrderingApp.api.model.RestaurantDetailsResponseAddressState;
 import com.upgrad.FoodOrderingApp.api.model.RestaurantList;
 import com.upgrad.FoodOrderingApp.api.model.RestaurantListResponse;
 import com.upgrad.FoodOrderingApp.service.businness.RestaurantService;
+import com.upgrad.FoodOrderingApp.service.entity.CategoryItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantCategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
@@ -89,6 +93,62 @@ public class RestaurantController {
             return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping(path = "/restaurant/{restaurant_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<RestaurantDetailsResponse> getRestaurantByRestaurantId(@PathVariable("restaurant_id") final String restaurant_id) throws RestaurantNotFoundException {
+
+        try {
+            RestaurantEntity restaurantEntity = restaurantService.getRestaurantByRestaurantId(restaurant_id);
+
+
+            RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState();
+            restaurantDetailsResponseAddressState.setId(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()));
+            restaurantDetailsResponseAddressState.setStateName(restaurantEntity.getAddress().getState().getStateName());
+
+            RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress();
+            restaurantDetailsResponseAddress.setId(restaurantEntity.getAddress().getUuid());
+            restaurantDetailsResponseAddress.setFlatBuildingName(restaurantEntity.getAddress().getFlatBuilNumber());
+            restaurantDetailsResponseAddress.setLocality(restaurantEntity.getAddress().getLocality());
+            restaurantDetailsResponseAddress.setCity(restaurantEntity.getAddress().getCity());
+            restaurantDetailsResponseAddress.setPincode(restaurantEntity.getAddress().getCity());
+            restaurantDetailsResponseAddress.setState(restaurantDetailsResponseAddressState);
+
+            List<RestaurantCategoryEntity> restaurantCategoryEntityList = restaurantService.getCategoryByRestaurant(restaurantEntity);
+            List<CategoryList> categoryLists = new ArrayList<>();
+            List<ItemList> itemLists = new ArrayList<>();
+            for (RestaurantCategoryEntity restaurantCategoryEntity : restaurantCategoryEntityList) {
+                CategoryList categoryList = new CategoryList();
+
+                categoryList.setId(UUID.fromString(restaurantCategoryEntity.getCategoryId().getUuid()));
+                categoryList.setCategoryName(restaurantCategoryEntity.getCategoryId().getCategoryName());
+
+                List<CategoryItemEntity> categoryItemEntityList = restaurantService.getItemByCategoryId(restaurantCategoryEntity);
+                for (CategoryItemEntity categoryItemEntity : categoryItemEntityList) {
+                    ItemList itemList = new ItemList();
+                    itemList.setId(UUID.fromString(categoryItemEntity.getItemId().getUuid()));
+                    itemList.setItemName(categoryItemEntity.getItemId().getItemName());
+                    itemList.setPrice(categoryItemEntity.getItemId().getPrice());
+                    ItemList.ItemTypeEnum itemType = categoryItemEntity.getItemId().getType().equals("1") ? ItemList.ItemTypeEnum.NON_VEG : ItemList.ItemTypeEnum.VEG;
+                    itemList.setItemType(itemType);
+                    itemLists.add(itemList);
+                }
+                categoryList.setItemList(itemLists);
+                categoryLists.add(categoryList);
+            }
+
+            RestaurantDetailsResponse restaurantResponseList = new RestaurantDetailsResponse().id(UUID.fromString(restaurantEntity.getUuid())).restaurantName(restaurantEntity.getRestaurantName())
+                    .photoURL(restaurantEntity.getPhotoUrl()).customerRating(BigDecimal.valueOf(restaurantEntity.getCustomerRating())).averagePrice(restaurantEntity.getAvgPrice()).numberCustomersRated(restaurantEntity.getNumberCustomersRated())
+                    .address(restaurantDetailsResponseAddress).categories(categoryLists);
+
+            return new ResponseEntity(restaurantResponseList, HttpStatus.OK);
+        } catch (RestaurantNotFoundException ex) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setCode(ex.getCode());
+            errorResponse.setMessage(ex.getErrorMessage());
+            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     private RestaurantListResponse buildResponseFromRestaurant(List<RestaurantEntity> restaurantEntityList, RestaurantListResponse listResponse) throws RestaurantNotFoundException {
         for (RestaurantEntity restaurantEntity : restaurantEntityList) {
