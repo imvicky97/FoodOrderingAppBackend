@@ -46,6 +46,17 @@ public class CustomerAuthDao {
     public void updateUser(final CustomerAuthEntity updatedCustomerAuthEntity) {
         entityManager.merge(updatedCustomerAuthEntity);
     }
+    public CustomerAuthEntity getAccessToken(String accessToken) {
+        try {
+            return entityManager.createNamedQuery("getUserAuthByAccessToken", CustomerAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
 
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public void updateCustomerAuth(CustomerAuthEntity customerAuthEntity) {
+        entityManager.merge(customerAuthEntity);
+    }
 }
 

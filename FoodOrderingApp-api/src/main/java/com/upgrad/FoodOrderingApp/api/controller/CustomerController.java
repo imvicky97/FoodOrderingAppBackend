@@ -1,12 +1,14 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
 import com.upgrad.FoodOrderingApp.api.model.LoginResponse;
+import com.upgrad.FoodOrderingApp.api.model.LogoutResponse;
 import com.upgrad.FoodOrderingApp.api.model.SignupCustomerRequest;
 import com.upgrad.FoodOrderingApp.api.model.SignupCustomerResponse;
 import com.upgrad.FoodOrderingApp.service.businness.CustomerService;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
+import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -83,5 +85,26 @@ public class CustomerController {
         return new ResponseEntity<LoginResponse>(loginResponse,headers, HttpStatus.OK);
     }
 
+
+    @RequestMapping(method = RequestMethod.POST, path =  "/customer/logout", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<LogoutResponse> logout(@RequestHeader("authorization") final String access_token) throws AuthorizationFailedException {
+        String[] accessToken = access_token.split("Bearer ");
+        String userAccessToken=null;
+        if(accessToken.length < 2)
+            userAccessToken=accessToken[0];
+        else
+            userAccessToken=accessToken[1];
+
+        CustomerAuthEntity customerAuthEntity = customerService.logout(userAccessToken);
+        if(customerAuthEntity==null)
+            throw new AuthorizationFailedException("ATHR-001","Customer is not Logged in");
+        LogoutResponse CustomerLogoutResponse = new LogoutResponse();
+
+        CustomerLogoutResponse.id(customerAuthEntity.getCustomer().getUuid().toString())
+         .message("LOGGED OUT SUCCESSFULLY");
+
+        return new ResponseEntity<LogoutResponse>(CustomerLogoutResponse,HttpStatus.OK);
+
+    }
 
 }
