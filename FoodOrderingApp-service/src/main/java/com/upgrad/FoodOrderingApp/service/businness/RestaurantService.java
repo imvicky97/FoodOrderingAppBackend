@@ -3,6 +3,7 @@ package com.upgrad.FoodOrderingApp.service.businness;
 import com.upgrad.FoodOrderingApp.service.dao.CategoryDao;
 import com.upgrad.FoodOrderingApp.service.dao.RestaurantDao;
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CategoryItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantCategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
@@ -71,5 +72,27 @@ public class RestaurantService {
             return Collections.emptyList();
         }
     }
+
+    public RestaurantEntity getRestaurantByRestaurantId(String restaurantId) throws RestaurantNotFoundException {
+        if(restaurantId == null)
+        {
+            throw new RestaurantNotFoundException("RNF-002","Restaurant id field should not be empty");
+        }
+        RestaurantEntity restaurantEntity = restaurantDao.restaurantsByRestaurantId(restaurantId);
+        if(restaurantEntity == null)
+        {
+            throw new RestaurantNotFoundException("RNF-001","No restaurant by this id");
+        }
+
+        return restaurantEntity;
+    }
+
+    public List<CategoryItemEntity> getItemByCategoryId(RestaurantCategoryEntity  restaurantCategoryEntity) throws RestaurantNotFoundException {
+
+        List<CategoryItemEntity> categoryItemEntity = categoryDao.getItemByCategoryId(restaurantCategoryEntity.getCategoryId());
+
+        return categoryItemEntity;
+    }
+
 
 }
