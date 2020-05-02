@@ -1,5 +1,6 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
+import com.upgrad.FoodOrderingApp.api.model.ErrorResponse;
 import com.upgrad.FoodOrderingApp.api.model.RestaurantDetailsResponseAddress;
 import com.upgrad.FoodOrderingApp.api.model.RestaurantDetailsResponseAddressState;
 import com.upgrad.FoodOrderingApp.api.model.RestaurantList;
@@ -7,6 +8,7 @@ import com.upgrad.FoodOrderingApp.api.model.RestaurantListResponse;
 import com.upgrad.FoodOrderingApp.service.businness.RestaurantService;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantCategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
 import com.upgrad.FoodOrderingApp.service.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,15 +47,46 @@ public class RestaurantController {
 
     @GetMapping(path = "/restaurant/name/{reastaurant_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByName(@PathVariable("reastaurant_name") final String restaurantName) throws RestaurantNotFoundException {
-        List<RestaurantEntity> restaurantEntityList = restaurantService.getRestaurantByRestaurantName(restaurantName);
-        RestaurantListResponse listResponse = new RestaurantListResponse();
+        try {
+            List<RestaurantEntity> restaurantEntityList = restaurantService.getRestaurantByRestaurantName(restaurantName);
 
-        if (restaurantEntityList.isEmpty()) {
-            listResponse.setRestaurants(Collections.emptyList());
-            return new ResponseEntity<>(listResponse, HttpStatus.OK);
+            RestaurantListResponse listResponse = new RestaurantListResponse();
 
-        } else {
-            return new ResponseEntity<>(buildResponseFromRestaurant(restaurantEntityList, listResponse), HttpStatus.OK);
+            if (restaurantEntityList.isEmpty()) {
+                listResponse.setRestaurants(Collections.emptyList());
+                return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+            } else {
+                return new ResponseEntity<>(buildResponseFromRestaurant(restaurantEntityList, listResponse), HttpStatus.OK);
+            }
+        } catch (RestaurantNotFoundException ex) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setCode(ex.getCode());
+            errorResponse.setMessage(ex.getErrorMessage());
+            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(path = "/restaurant/category/{category_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<RestaurantListResponse> getRestaurantByCategoryId(@PathVariable("category_id") final String categoryId) throws CategoryNotFoundException, RestaurantNotFoundException {
+        try {
+            List<RestaurantEntity> restaurantEntityList = restaurantService.getRestaurantsByCategory(categoryId);
+
+            RestaurantListResponse restaurantResponseList = new RestaurantListResponse();
+
+            if (restaurantEntityList.isEmpty()) {
+                restaurantResponseList.setRestaurants(Collections.emptyList());
+                return new ResponseEntity<>(restaurantResponseList, HttpStatus.OK);
+
+            } else {
+                buildResponseFromRestaurant(restaurantEntityList, restaurantResponseList);
+            }
+            return new ResponseEntity<>(restaurantResponseList, HttpStatus.OK);
+        } catch (CategoryNotFoundException ex) {
+            ErrorResponse errorResponse = new ErrorResponse();
+            errorResponse.setCode(ex.getCode());
+            errorResponse.setMessage(ex.getErrorMessage());
+            return new ResponseEntity(errorResponse, HttpStatus.NOT_FOUND);
         }
     }
 
