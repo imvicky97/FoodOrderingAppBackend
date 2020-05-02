@@ -60,5 +60,4 @@ public class CategoryEntity {
         this.categoryName = categoryName;
     }
 
-    public void setItems(List<ItemEntity> items) { }
 }
