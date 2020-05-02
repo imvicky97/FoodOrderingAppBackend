@@ -5,6 +5,7 @@ import com.upgrad.FoodOrderingApp.api.model.CategoryDetailsResponse;
 import com.upgrad.FoodOrderingApp.api.model.CategoryListResponse;
 import com.upgrad.FoodOrderingApp.api.model.ItemList;
 import com.upgrad.FoodOrderingApp.service.businness.CategoryService;
+import com.upgrad.FoodOrderingApp.service.common.ItemType;
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
@@ -31,7 +32,7 @@ public class CategoryController {
 
     @GetMapping(path = "/category", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<CategoriesListResponse> categories() {
-        List<CategoryEntity> categoryEntityList = categoryService.getAllCategories();
+        List<CategoryEntity> categoryEntityList = categoryService.getAllCategoriesOrderedByName();
         CategoriesListResponse categoriesListResponse = new CategoriesListResponse();
 
         List<CategoryListResponse> categoryListResponse = new ArrayList<>();
@@ -45,7 +46,7 @@ public class CategoryController {
             return new ResponseEntity<>(categoriesListResponse, HttpStatus.OK);
 
         } else {
-            categoriesListResponse.setCategories(Collections.emptyList());
+            categoriesListResponse.setCategories(null);
             return new ResponseEntity<>(categoriesListResponse, HttpStatus.OK);
         }
     }
@@ -63,7 +64,7 @@ public class CategoryController {
             itemList.setId(UUID.fromString(itemEntity.getUuid()));
             itemList.setItemName(itemEntity.getItemName());
             itemList.setPrice(itemEntity.getPrice());
-            ItemList.ItemTypeEnum itemType = itemEntity.getType().equals("1") ? ItemList.ItemTypeEnum.NON_VEG : ItemList.ItemTypeEnum.VEG;
+            ItemList.ItemTypeEnum itemType = itemEntity.getType().equals("0") ? ItemList.ItemTypeEnum.VEG : ItemList.ItemTypeEnum.NON_VEG;
             itemList.setItemType(itemType);
             categoryListResponse.addItemListItem(itemList);
         }

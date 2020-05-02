@@ -10,6 +10,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -35,7 +36,6 @@ public class CategoryEntity {
     @Size(max = 255)
     private String categoryName;
 
-
     public Integer getId() {
         return id;
     }
@@ -59,4 +59,6 @@ public class CategoryEntity {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
+
+    public void setItems(List<ItemEntity> items) { }
 }

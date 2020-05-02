@@ -23,7 +23,7 @@ public class CategoryService {
     private ItemDao itemDao;
 
 
-    public List<CategoryEntity> getAllCategories() {
+    public List<CategoryEntity> getAllCategoriesOrderedByName() {
         return categoryDao.getAllCategory().getResultList();
     }
 
