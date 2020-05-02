@@ -7,12 +7,14 @@ import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
+import com.upgrad.FoodOrderingApp.service.exception.UpdateCustomerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.concurrent.ExecutionException;
 
 
 @Transactional
@@ -136,7 +138,32 @@ public class CustomerService {
         return (password.matches("^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$"));
     }
 
+    public CustomerEntity getCustomer(String access_token) throws AuthorizationFailedException {
+        CustomerAuthEntity customerAuthEntity = customerAuthDao.getAccessToken(access_token);
+        if(customerAuthEntity == null)
+            throw new AuthorizationFailedException("ATHR-001","Customer is not Logged in");
 
-//    public Object logout(String s) {
-//    }
+        if( customerAuthEntity.getLogoutAt() != null){
+            throw new AuthorizationFailedException("ATHR-002","Customer is logged out. Log in again to access this endpoint");
+
+        }
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        if(customerAuthEntity != null && customerAuthEntity.getExpiresAt().compareTo(now) < 0 ) {
+            throw new AuthorizationFailedException("ATHR-003","Your session is expired. Log in again to access this endpoint.");
+        }
+        if(customerAuthEntity != null) {
+            return customerAuthEntity.getCustomer();
+        }
+
+
+        return null;
+    }
+
+    public CustomerEntity updateCustomer(CustomerEntity customerEntity) {
+       customerDao.updateUser(customerEntity);
+        return customerEntity;
+    }
+
+//
 }
