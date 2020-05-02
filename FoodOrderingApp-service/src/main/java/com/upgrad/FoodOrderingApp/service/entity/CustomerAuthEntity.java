@@ -1,14 +1,23 @@
 package com.upgrad.FoodOrderingApp.service.entity;
-
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
@@ -18,7 +27,9 @@ import java.time.ZonedDateTime;
 @NamedQueries({
 //        @NamedQuery(name = "getCustomerAuthByCustomerId", query = "select u from CustomerAuthEntity u where logout_at is not null"),
         @NamedQuery(name = "customerAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken"),
-        @NamedQuery(name = "getUserAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken")
+        @NamedQuery(name = "getUserAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken"),
+        @NamedQuery(name = "customerByAccessToken", query = "select ce from CustomerAuthEntity ce where ce.accessToken =:accessToken")
+
 })
 public class CustomerAuthEntity<UserEntity> {
 
@@ -28,6 +39,8 @@ public class CustomerAuthEntity<UserEntity> {
     private int id;
 
     @Column(name = "uuid")
+    @Size(max = 200)
+    @NotNull
     private String uuid;
 
     @ManyToOne
@@ -52,6 +65,7 @@ public class CustomerAuthEntity<UserEntity> {
     @Column(name = "logout_at")
     private ZonedDateTime logoutAt;
 
+
     public int getId() {
         return id;
     }
@@ -67,6 +81,7 @@ public class CustomerAuthEntity<UserEntity> {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
 
     public CustomerEntity getCustomer() {
         return customerEntity;
@@ -84,6 +99,7 @@ public class CustomerAuthEntity<UserEntity> {
         this.accessToken = accessToken;
     }
 
+
     public ZonedDateTime getExpiresAt() {
         return expiresAt;
     }
@@ -91,6 +107,7 @@ public class CustomerAuthEntity<UserEntity> {
     public void setExpiresAt(ZonedDateTime expiresAt) {
         this.expiresAt = expiresAt;
     }
+
 
     public ZonedDateTime getLoginAt() {
         return loginAt;
@@ -122,4 +139,6 @@ public class CustomerAuthEntity<UserEntity> {
 //    public String toString() {
 //        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 //    }
+
+
 }

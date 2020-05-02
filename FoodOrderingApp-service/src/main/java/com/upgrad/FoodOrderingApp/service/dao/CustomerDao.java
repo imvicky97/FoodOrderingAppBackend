@@ -19,6 +19,7 @@ public class CustomerDao {
         entityManager.persist(customerEntity);
         return customerEntity;
     }
+
     /**
      * @param contact_number
      * @return User with the given contact_number
@@ -31,6 +32,7 @@ public class CustomerDao {
         }
     }
 
+
     public void updateUser(final CustomerEntity updatedCustomerEntity) {
         entityManager.merge(updatedCustomerEntity);
     }
@@ -42,4 +44,13 @@ public class CustomerDao {
             return null;
         }
     }
+
+    public CustomerEntity getUserByEmail(String username) {
+        try {
+            return entityManager.createNamedQuery("getCustomerByEmail" , CustomerEntity.class).setParameter("email" , username).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
 }

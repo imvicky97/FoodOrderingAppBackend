@@ -2,8 +2,18 @@ package com.upgrad.FoodOrderingApp.service.entity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import javax.persistence.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -13,10 +23,12 @@ import java.io.Serializable;
 @Table(name = "customer")
 @NamedQueries({
         @NamedQuery(name = "getCustomerByContactNumber", query = "select u from CustomerEntity u where  u.contact_number = :contact_number"),
-        @NamedQuery(name = "getCustomerByUUID", query = "select u from CustomerEntity u where  u.uuid = :uuid")
+        @NamedQuery(name = "getCustomerByUUID", query = "select u from CustomerEntity u where  u.uuid = :uuid"),
+        @NamedQuery(name = "getCustomerByEmail", query = "select ce from CustomerEntity ce where ce.email_address =:email")
 
 
 })
+
 public class CustomerEntity  implements  Serializable{
 
     @Id

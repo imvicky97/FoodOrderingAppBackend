@@ -57,4 +57,9 @@ public class RestaurantDao {
         }
     }
 
+    public RestaurantEntity updateRestaurantEntity(RestaurantEntity restaurantEntity) {
+        entityManager.merge(restaurantEntity);
+        return restaurantEntity;
+    }
+
 }

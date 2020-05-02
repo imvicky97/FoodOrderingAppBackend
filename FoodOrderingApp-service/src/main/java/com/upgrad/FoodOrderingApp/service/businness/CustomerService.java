@@ -1,5 +1,4 @@
 package com.upgrad.FoodOrderingApp.service.businness;
-
 import com.upgrad.FoodOrderingApp.service.dao.CustomerAuthDao;
 import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
@@ -8,6 +7,7 @@ import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedExceptio
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
 import com.upgrad.FoodOrderingApp.service.exception.UpdateCustomerException;
+import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -82,7 +82,6 @@ public class CustomerService {
         }
         return customerDao.createUser(customerEntity);
     }
-
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerAuthEntity authenticate(final String contact_number, final String password) throws AuthenticationFailedException {
@@ -184,6 +183,5 @@ public class CustomerService {
             throw new UpdateCustomerException("UCR-001","Weak password!");
         return updatedCustomerEntity;
     }
-
 
 }
