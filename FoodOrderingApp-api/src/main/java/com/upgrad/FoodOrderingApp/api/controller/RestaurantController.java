@@ -92,7 +92,7 @@ public class RestaurantController {
     @GetMapping(path = "/restaurant/{restaurant_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantDetailsResponse> getRestaurantByRestaurantId(@PathVariable("restaurant_id") final String restaurant_id) throws RestaurantNotFoundException {
 
-        RestaurantEntity restaurantEntity = restaurantService.getRestaurantByRestaurantId(restaurant_id);
+        RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(restaurant_id);
 
 
         RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState();
