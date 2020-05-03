@@ -18,7 +18,6 @@ public class CustomerDao {
     public CustomerEntity createUser(CustomerEntity customerEntity) {
         entityManager.persist(customerEntity);
         return customerEntity;
-
     }
     /**
      * @param contact_number

@@ -52,10 +52,7 @@ public class CustomerService {
 
          customerAuthEntity.setLogoutAt(ZonedDateTime.now());
         customerAuthDao.updateCustomerAuth(customerAuthEntity);
-
-
         return  customerAuthEntity;
-
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

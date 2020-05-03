@@ -15,7 +15,6 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "customer_auth")
-
 @NamedQueries({
 //        @NamedQuery(name = "getCustomerAuthByCustomerId", query = "select u from CustomerAuthEntity u where logout_at is not null"),
         @NamedQuery(name = "customerAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken"),
@@ -78,7 +77,7 @@ public class CustomerAuthEntity<UserEntity> {
     }
 
     public String getAccessToken() {
-        return accessToken;
+        return  accessToken;
     }
 
     public void setAccessToken(String accessToken) {

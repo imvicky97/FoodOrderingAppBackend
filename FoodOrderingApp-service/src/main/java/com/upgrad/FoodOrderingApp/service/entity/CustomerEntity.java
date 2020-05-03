@@ -11,7 +11,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "customer")
-
 @NamedQueries({
         @NamedQuery(name = "getCustomerByContactNumber", query = "select u from CustomerEntity u where  u.contact_number = :contact_number"),
         @NamedQuery(name = "getCustomerByUUID", query = "select u from CustomerEntity u where  u.uuid = :uuid")
