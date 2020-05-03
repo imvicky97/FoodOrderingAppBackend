@@ -86,7 +86,7 @@ public class CustomerController {
     public ResponseEntity<LogoutResponse> logout(@RequestHeader("authorization") final String access_token) throws AuthorizationFailedException {
         String[] accessToken = access_token.split("Bearer ");
         String userAccessToken=null;
-        if(accessToken.length < 2)
+        if(accessToken.length < 2) 
             userAccessToken=accessToken[0];
         else
             userAccessToken=accessToken[1];
