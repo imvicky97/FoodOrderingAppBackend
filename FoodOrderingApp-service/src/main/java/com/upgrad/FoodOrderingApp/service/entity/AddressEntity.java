@@ -3,20 +3,21 @@ package com.upgrad.FoodOrderingApp.service.entity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @Entity
 @Table(name = "address")
+@NamedQueries(
+        {
+                @NamedQuery(name = "addressByUuid", query = "select a from AddressEntity a where a.uuid =:uuid"),
+                @NamedQuery(name = "allAddresses", query = "select a from AddressEntity a "),
+                @NamedQuery(name = "addressById", query = "select a from AddressEntity a where a.id=:id")
+        }
+)
+
 public class AddressEntity {
 
     @Id
@@ -52,19 +53,19 @@ public class AddressEntity {
     @Column(name = "active")
     private Integer active;
 
-    public Integer getId() {
-        return id;
+    public Long getId() {
+        return Long.valueOf(id);
     }
 
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public String getUuid() {
+        return uuid.toString();
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
