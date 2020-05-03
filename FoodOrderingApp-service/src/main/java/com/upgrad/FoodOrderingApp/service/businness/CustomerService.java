@@ -93,7 +93,7 @@ public class CustomerService {
 
 
         if (customerEntity == null) throw new AuthenticationFailedException("ATH-001", "This contact number has not been registered!");
-        final String encryptedPassword = PasswordCryptographyProvider.encrypt(password, customerEntity.getSalt());
+        final String encryptedPassword = passwordCryptographyProvider.encrypt(password, customerEntity.getSalt());
         if (encryptedPassword.equals(customerEntity.getPassword())) {
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedPassword);
             CustomerAuthEntity customerAuthEntity = new CustomerAuthEntity();
@@ -157,7 +157,7 @@ public class CustomerService {
         }
 
 
-        return null;
+        return customerAuthEntity.getCustomer();
     }
 
     public CustomerEntity updateCustomer(CustomerEntity customerEntity) {
@@ -165,5 +165,28 @@ public class CustomerService {
         return customerEntity;
     }
 
-//
+    public CustomerEntity updateCustomerPassword(String oldPwd, String newPwd, CustomerEntity customerEntity) throws UpdateCustomerException {
+
+        final String encryptedPassword = passwordCryptographyProvider.encrypt(oldPwd, customerEntity.getSalt());
+        CustomerEntity updatedCustomerEntity = customerDao.getCustomerById(customerEntity.getUuid());
+        if (encryptedPassword.equals(updatedCustomerEntity.getPassword())) {
+            if(!isPasswordString(newPwd)) {
+                throw new UpdateCustomerException("UCR-001","Weak password!");
+            }
+            String[] encrptedPassword = passwordCryptographyProvider.encrypt(newPwd);
+            updatedCustomerEntity.setSalt(encrptedPassword[0]);
+            updatedCustomerEntity.setPassword(encrptedPassword[1]);
+
+        }else {
+            throw new UpdateCustomerException("UCR-004","Incorrect old password!");
+        }
+
+        updateCustomer(updatedCustomerEntity);
+
+        if(updatedCustomerEntity==null)
+            throw new UpdateCustomerException("UCR-001","Weak password!");
+        return updatedCustomerEntity;
+    }
+
+
 }

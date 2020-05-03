@@ -34,7 +34,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(AuthorizationFailedException.class)
-    public ResponseEntity<ErrorResponse> signOutRestrictedException(AuthorizationFailedException ex, WebRequest webReq) {
+    public ResponseEntity<ErrorResponse> authorizationFailedException(AuthorizationFailedException ex, WebRequest webReq) {
         return new ResponseEntity<ErrorResponse>(
                 new ErrorResponse().code(ex.getCode()).message(ex.getErrorMessage()),
                 HttpStatus.FORBIDDEN
@@ -42,7 +42,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(UpdateCustomerException.class)
-    public ResponseEntity<ErrorResponse> signOutRestrictedException(UpdateCustomerException ex, WebRequest webReq) {
+    public ResponseEntity<ErrorResponse> updateCustomerException(UpdateCustomerException ex, WebRequest webReq) {
         return new ResponseEntity<ErrorResponse>(
                 new ErrorResponse().code(ex.getCode()).message(ex.getErrorMessage()),
                 HttpStatus.BAD_REQUEST
