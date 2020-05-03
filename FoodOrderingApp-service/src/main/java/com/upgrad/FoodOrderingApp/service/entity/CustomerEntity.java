@@ -2,6 +2,7 @@ package com.upgrad.FoodOrderingApp.service.entity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import javax.persistence.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,9 +21,15 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "customer")
-@NamedQueries(
+
+@NamedQueries({
+        @NamedQuery(name = "getCustomerByContactNumber", query = "select u from CustomerEntity u where  u.contact_number = :contact_number"),
+        @NamedQuery(name = "getCustomerByUUID", query = "select u from CustomerEntity u where  u.uuid = :uuid"),
         @NamedQuery(name = "getCustomerByEmail", query = "select ce from CustomerEntity ce where ce.email_address =:email")
-)
+
+
+})
+
 public class CustomerEntity  implements  Serializable{
 
     @Id
@@ -40,7 +47,7 @@ public class CustomerEntity  implements  Serializable{
     private String first_name;
 
     @Column(name = "lastname")
-    @NotNull
+  //  @NotNull
     @Size(max = 30)
     private String last_name;
 

@@ -1,8 +1,13 @@
 package com.upgrad.FoodOrderingApp.service.entity;
-
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
+import javax.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,15 +24,22 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "customer_auth")
-@NamedQueries(
-        @NamedQuery(name = "customerByAccessToken", query = "select ce from CustomerAuthEntity ce where ce.accessToken =:accessToken")
-)
-public class CustomerAuthEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
-    @Column(name = "UUID")
+@NamedQueries({
+//        @NamedQuery(name = "getCustomerAuthByCustomerId", query = "select u from CustomerAuthEntity u where logout_at is not null"),
+        @NamedQuery(name = "customerAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken"),
+        @NamedQuery(name = "getUserAuthByAccessToken", query = "select u from CustomerAuthEntity u where u.accessToken=:accessToken"),
+        @NamedQuery(name = "customerByAccessToken", query = "select ce from CustomerAuthEntity ce where ce.accessToken =:accessToken")
+
+})
+public class CustomerAuthEntity<UserEntity> {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "uuid")
     @Size(max = 200)
     @NotNull
     private String uuid;
@@ -35,27 +47,31 @@ public class CustomerAuthEntity {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "customer_id")
-    @NotNull
-    private CustomerEntity customerId;
+    private CustomerEntity customerEntity;
 
     @Column(name = "access_token")
+    @NotNull
     @Size(max = 500)
     private String accessToken;
 
+
+    @Column(name = "expires_at")
+    @NotNull
+    private ZonedDateTime expiresAt;
+
     @Column(name = "login_at")
+    @NotNull
     private ZonedDateTime loginAt;
 
     @Column(name = "logout_at")
     private ZonedDateTime logoutAt;
 
-    @Column(name = "expires_at")
-    private ZonedDateTime expiresAt;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -67,12 +83,13 @@ public class CustomerAuthEntity {
         this.uuid = uuid;
     }
 
-    public CustomerEntity getCustomerId() {
-        return customerId;
+
+    public CustomerEntity getCustomer() {
+        return customerEntity;
     }
 
-    public void setCustomerId(CustomerEntity customerId) {
-        this.customerId = customerId;
+    public void setCustomer(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
     }
 
     public String getAccessToken() {
@@ -82,6 +99,16 @@ public class CustomerAuthEntity {
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
+
+
+    public ZonedDateTime getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(ZonedDateTime expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
 
     public ZonedDateTime getLoginAt() {
         return loginAt;
@@ -99,11 +126,20 @@ public class CustomerAuthEntity {
         this.logoutAt = logoutAt;
     }
 
-    public ZonedDateTime getExpiresAt() {
-        return expiresAt;
+    @Override
+    public boolean equals(Object obj) {
+        return new EqualsBuilder().append(this, obj).isEquals();
     }
 
-    public void setExpiresAt(ZonedDateTime expiresAt) {
-        this.expiresAt = expiresAt;
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(this).hashCode();
     }
+
+//    @Override
+//    public String toString() {
+//        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+//    }
+
+
 }
