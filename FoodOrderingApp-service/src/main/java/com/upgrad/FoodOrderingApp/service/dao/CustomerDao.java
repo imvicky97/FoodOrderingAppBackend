@@ -42,4 +42,21 @@ public class CustomerDao {
             return null;
         }
     }
+
+    public CustomerAuthEntity getCustomerByAccessToken(String accessToken) {
+        try {
+            return entityManager.createNamedQuery("customerByAccessToken" , CustomerAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+        } catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public CustomerEntity getUserByEmail(String username) {
+        try {
+            return entityManager.createNamedQuery("getCustomerByEmail" , CustomerEntity.class).setParameter("email" , username).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
 }
