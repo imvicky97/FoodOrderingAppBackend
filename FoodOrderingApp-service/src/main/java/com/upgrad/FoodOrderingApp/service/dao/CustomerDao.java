@@ -36,7 +36,7 @@ public class CustomerDao {
     public CustomerEntity getCustomerByUuid(final String uuid) {
         try {
             return entityManager.createNamedQuery("getCustomerByUUID", CustomerEntity.class).setParameter("uuid", uuid).getSingleResult();
-        } catch(NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }
@@ -45,7 +45,7 @@ public class CustomerDao {
         try {
             return entityManager.createNamedQuery("customerAuthTokenByAccessToken", CustomerAuthTokenEntity.class)
                     .setParameter("accessToken", accessToken).getSingleResult();
-        } catch(NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }
@@ -65,7 +65,7 @@ public class CustomerDao {
 
     public CustomerEntity getUserByEmail(String username) {
         try {
-            return entityManager.createNamedQuery("getCustomerByEmail" , CustomerEntity.class).setParameter("email" , username).getSingleResult();
+            return entityManager.createNamedQuery("getCustomerByEmail", CustomerEntity.class).setParameter("email", username).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }

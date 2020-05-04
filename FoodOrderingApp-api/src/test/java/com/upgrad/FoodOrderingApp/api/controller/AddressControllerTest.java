@@ -202,7 +202,7 @@ public class AddressControllerTest {
         final AddressEntity deletedAddressEntity = new AddressEntity();
         final String uuid = UUID.randomUUID().toString();
         deletedAddressEntity.setUuid(uuid);
-        when(mockAddressService.deleteAddress("82849cd5-106e-4b34-b9bf-94954c6ff527", addressEntity.toString())).thenReturn(deletedAddressEntity);
+        when(mockAddressService.deleteAddress("82849cd5-106e-4b34-b9bf-94954c6ff527", addressEntity)).thenReturn(deletedAddressEntity);
 
         mockMvc
                 .perform(delete("/address/82849cd5-106e-4b34-b9bf-94954c6ff527")
@@ -214,7 +214,7 @@ public class AddressControllerTest {
                 .andExpect(jsonPath("status").value("ADDRESS DELETED SUCCESSFULLY"));
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
         verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
-        verify(mockAddressService, times(1)).deleteAddress("82849cd5-106e-4b34-b9bf-94954c6ff527", addressEntity.toString());
+        verify(mockAddressService, times(1)).deleteAddress("82849cd5-106e-4b34-b9bf-94954c6ff527", addressEntity);
     }
 
     //This test case passes when you have handled the exception of trying to delete an address with non existing access-token.

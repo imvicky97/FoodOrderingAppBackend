@@ -1,7 +1,6 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -133,10 +132,4 @@ public class CustomerEntity implements Serializable {
     public boolean equals(Object obj) {
         return new EqualsBuilder().append(this, obj).isEquals();
     }
-
-//    @Override
-//    public String toString() {
-//        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);//
-//    }
-
 }

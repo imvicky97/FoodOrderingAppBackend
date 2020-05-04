@@ -1,6 +1,15 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -9,8 +18,8 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "customer_auth")
 @NamedQueries({
-        @NamedQuery(name = "customerAuthTokenByAccessToken" , query = "select ct from CustomerAuthTokenEntity ct where ct.accessToken=:accessToken"),
-        @NamedQuery(name = "customerAuthTokenById" , query = "select ct from CustomerAuthTokenEntity ct where ct.customer=:customer")
+        @NamedQuery(name = "customerAuthTokenByAccessToken", query = "select ct from CustomerAuthTokenEntity ct where ct.accessToken=:accessToken"),
+        @NamedQuery(name = "customerAuthTokenById", query = "select ct from CustomerAuthTokenEntity ct where ct.customer=:customer")
 })
 
 
