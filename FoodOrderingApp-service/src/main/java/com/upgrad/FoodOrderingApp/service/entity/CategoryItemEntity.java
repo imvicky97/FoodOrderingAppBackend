@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "category_item")
 @NamedQueries(
-        @NamedQuery(name = "getItemByCategoryId", query = "select cie from CategoryItemEntity cie where cie.categoryId =:categoryId")
+        @NamedQuery(name = "getItemsByCategory", query = "select cie from CategoryItemEntity cie where cie.categoryId =:categoryId")
 )
 public class CategoryItemEntity {
 

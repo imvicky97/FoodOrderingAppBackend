@@ -30,6 +30,16 @@ public class RestaurantService {
     private CategoryDao categoryDao;
 
 
+    /* This method is to get restaurants By Rating and returns list of RestaurantEntity
+    If error throws exception with error code and error message.
+    */
+    public List<RestaurantEntity> restaurantsByRating() {
+
+        //Calls restaurantsByRating of restaurantDao to get list of RestaurantEntity
+        List<RestaurantEntity> restaurantEntities = restaurantDao.restaurantsByRating();
+        return restaurantEntities;
+    }
+
     /**
      * The method implements the business logic for getAllRestaurants endpoint.
      */
@@ -44,7 +54,7 @@ public class RestaurantService {
         return restaurantCategoryEntity;
     }
 
-    public List<RestaurantEntity> getRestaurantByRestaurantName(String restaurantName) throws RestaurantNotFoundException {
+    public List<RestaurantEntity> restaurantsByName(String restaurantName) throws RestaurantNotFoundException {
         if (restaurantName == null) {
             throw new RestaurantNotFoundException("RNF-003", "Restaurant name field should not be empty");
         }
@@ -53,7 +63,7 @@ public class RestaurantService {
         return restaurantEntity;
     }
 
-    public List<RestaurantEntity> getRestaurantsByCategory(String categoryId) throws CategoryNotFoundException {
+    public List<RestaurantEntity> restaurantByCategory(String categoryId) throws CategoryNotFoundException {
         if (categoryId == null) {
             throw new CategoryNotFoundException("CNF-001", "Category id field should not be empty");
         }

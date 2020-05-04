@@ -17,6 +17,15 @@ public class RestaurantDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    //To get the list of restaurant by ratings from db
+    public List<RestaurantEntity> restaurantsByRating() {
+        try {
+            return entityManager.createNamedQuery("restaurantsByRating", RestaurantEntity.class).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
     public TypedQuery<RestaurantEntity> getAllRestaurants() {
         try {
             return entityManager.createNamedQuery("getAllRestaurants", RestaurantEntity.class);
@@ -25,9 +34,18 @@ public class RestaurantDao {
         }
     }
 
+    //To get restaurant by UUID from db
+    public RestaurantEntity getRestaurantByUuid(String uuid) {
+        try {
+            return entityManager.createNamedQuery("getRestaurantByUuid", RestaurantEntity.class).setParameter("uuid", uuid).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
     public List<RestaurantCategoryEntity> getCategoryByRestaurant(RestaurantEntity restaurantEntity) {
         try {
-            return entityManager.createNamedQuery("getCategoryByRestaurant", RestaurantCategoryEntity.class).setParameter("restaurantId", restaurantEntity).getResultList();
+            return entityManager.createNamedQuery("getCategoriesByRestaurant", RestaurantCategoryEntity.class).setParameter("restaurantId", restaurantEntity).getResultList();
         } catch (NoResultException nre) {
             return Collections.emptyList();
         }
@@ -49,9 +67,9 @@ public class RestaurantDao {
         }
     }
 
-    public RestaurantEntity restaurantsByRestaurantId(String Uuid) {
+    public RestaurantEntity restaurantsByRestaurantId(String uuid) {
         try {
-            return entityManager.createNamedQuery("restaurantsByRestaurantId", RestaurantEntity.class).setParameter("uuid", Uuid).getSingleResult();
+            return entityManager.createNamedQuery("getRestaurantByUuid", RestaurantEntity.class).setParameter("uuid", uuid).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }

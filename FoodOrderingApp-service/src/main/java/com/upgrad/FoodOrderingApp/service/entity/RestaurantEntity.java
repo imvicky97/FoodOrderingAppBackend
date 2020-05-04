@@ -21,7 +21,8 @@ import javax.validation.constraints.NotNull;
         {
                 @NamedQuery(name = "getAllRestaurants", query = "select r from RestaurantEntity r"),
                 @NamedQuery(name = "getRestaurantByName", query = "select r from RestaurantEntity r where lower(r.restaurantName) LIKE lower(:restaurantName)"),
-                @NamedQuery(name = "restaurantsByRestaurantId", query = "select r from RestaurantEntity r where r.uuid =:uuid")
+                @NamedQuery(name = "getRestaurantByUuid", query = "select r from RestaurantEntity r where r.uuid =:uuid"),
+                @NamedQuery(name = "restaurantsByRating",query = "SELECT r FROM RestaurantEntity r ORDER BY r.customerRating DESC"),
         }
 )
 public class RestaurantEntity {
