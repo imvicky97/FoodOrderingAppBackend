@@ -7,6 +7,7 @@ import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
 import com.upgrad.FoodOrderingApp.service.entity.OrderItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+import com.upgrad.FoodOrderingApp.service.exception.ItemNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +72,14 @@ public class ItemService {
         }
 
         return sortedItemEntites;
+    }
+
+    public ItemEntity getItemByUUID(String itemUuid) throws ItemNotFoundException {
+        ItemEntity itemEntity = itemDao.getItemById(itemUuid);
+        if (itemEntity == null) {
+            throw new ItemNotFoundException("INF-003", "No item by this id exist");
+        }
+        return itemEntity;
     }
 
     private Map<String, Integer> sortMapByValues(Map<String, Integer> map) {

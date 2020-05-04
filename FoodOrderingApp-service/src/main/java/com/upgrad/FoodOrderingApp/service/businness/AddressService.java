@@ -38,7 +38,7 @@ public class AddressService {
     }
 
     @Transactional
-    public AddressEntity getAddressByUuid(final String addressUuid) {
+    public AddressEntity getAddressByUuid(final String addressUuid, CustomerEntity customerEntity) {
         return addressDao.getAddressByUuid(addressUuid);
     }
 

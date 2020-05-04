@@ -24,4 +24,10 @@ public class OrderDao {
             return null;
         }
     }
+
+    //To save Order in the db
+    public OrderEntity saveOrder(OrderEntity ordersEntity) {
+        entityManager.persist(ordersEntity);
+        return ordersEntity;
+    }
 }
