@@ -15,7 +15,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 @Entity
 @Table(name = "address")
@@ -36,7 +35,7 @@ public class AddressEntity {
     @Column(name = "uuid")
     @Size(max = 200)
     @NotNull
-    private UUID uuid;
+    private String uuid;
 
     @Column(name = "flat_buil_number")
     @Size(max = 255)
@@ -62,11 +61,12 @@ public class AddressEntity {
     @Column(name = "active")
     private Integer active;
 
-    public AddressEntity() {}
+    public AddressEntity() {
+    }
 
     public AddressEntity(String uuid, String flatBuildingName, String locality, String city, String pincode, StateEntity stateEntity) {
 
-        this.uuid = UUID.fromString(uuid);
+        this.uuid = uuid;
         this.flatBuildingName = flatBuildingName;
         this.locality = locality;
         this.city = city;
@@ -84,11 +84,11 @@ public class AddressEntity {
     }
 
     public String getUuid() {
-        return uuid.toString();
+        return uuid;
     }
 
     public void setUuid(String uuid) {
-        this.uuid = UUID.fromString(uuid);
+        this.uuid = uuid;
     }
 
     public String getFlatBuilNumber() {

@@ -80,7 +80,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorResponse> updateCustomerException(UpdateCustomerException ex, WebRequest webReq) {
         return new ResponseEntity<>(
                 new ErrorResponse().code(ex.getCode()).message(ex.getErrorMessage()),
-                HttpStatus.FORBIDDEN
+                HttpStatus.BAD_REQUEST
         );
     }
 

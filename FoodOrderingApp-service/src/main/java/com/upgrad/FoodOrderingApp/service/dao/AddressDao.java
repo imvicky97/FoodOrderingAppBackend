@@ -17,7 +17,7 @@ public class AddressDao {
         try {
             return entityManager.createNamedQuery("addressById", AddressEntity.class).setParameter("id", addressId)
                     .getSingleResult();
-        } catch(NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
 
@@ -27,7 +27,7 @@ public class AddressDao {
         try {
             return entityManager.createNamedQuery("addressByUuid", AddressEntity.class).setParameter("uuid", addressUuid)
                     .getSingleResult();
-        } catch(NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
 
@@ -41,15 +41,7 @@ public class AddressDao {
     public AddressEntity deleteAddressByUuid(final AddressEntity addressEntity) {
         entityManager.remove(addressEntity);
         return addressEntity;
-        /*try {
-            AddressEntity ae = entityManager.createNamedQuery("deleteAddressByUuid", AddressEntity.class).setParameter("uuid", addressUuid)
-                    .getSingleResult();
-            ae.setActive(0);
-            entityManager.persist(ae);
-            return ae;
-        } catch (NoResultException nre) {
-            return null;
-        }*/
+
     }
 
 }

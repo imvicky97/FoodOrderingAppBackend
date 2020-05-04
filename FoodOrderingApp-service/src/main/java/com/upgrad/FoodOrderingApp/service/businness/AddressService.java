@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -135,14 +136,24 @@ public class AddressService {
         return addressDao.deleteAddressByUuid(addressEntity);
     }
 
-    public List<AddressEntity> getAllAddress(final String bearerToken) throws AuthorizationFailedException {
 
-        customerAdminBusinessService.validateAccessToken(bearerToken);
+    /*This method is to getAllAddress of the customerEntity.This method takes Customer Entity and returns list of AddressEntity.
+     */
+    public List<AddressEntity> getAllAddress(CustomerEntity customerEntity) {
 
-        //get the customerAuthToken details from customerDao
-        CustomerAuthTokenEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(bearerToken);
+        //Creating List of AddressEntities.
+        List<AddressEntity> addressEntities = new LinkedList<>();
 
-        return customerAddressDao.getAddressForCustomerByUuid(customerAuthTokenEntity.getCustomer().getUuid());
+        //Calls Method of customerAddressDao,getAllCustomerAddressByCustomer and returns AddressList.
+        List<CustomerAddressEntity> customerAddressEntities = customerAddressDao.getAllCustomerAddressByCustomer(customerEntity);
+        if (customerAddressEntities != null) { //Checking if CustomerAddressEntity is null else extracting address and adding to the addressEntites list.
+            customerAddressEntities.forEach(customerAddressEntity -> {
+                addressEntities.add(customerAddressEntity.getAddress());
+            });
+        }
+
+        return addressEntities;
+
     }
 
     public List<StateEntity> getAllStates() throws AuthorizationFailedException {
