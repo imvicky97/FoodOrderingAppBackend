@@ -4,6 +4,7 @@ import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.businness.AddressService;
 import com.upgrad.FoodOrderingApp.service.businness.CustomerAdminBusinessService;
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.entity.StateEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AddressNotFoundException;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
@@ -107,11 +108,14 @@ public class AddressController {
         // Splits the Bearer authorization text as Bearer and bearerToken
         String[] bearerToken = authorization.split("Bearer ");
 
+        CustomerEntity customer = customerService.getCustomer(bearerToken[1]);
+
+        AddressEntity address = addressService.getAddressByUUID(addressUuid, customer);
         // Calls the deleteAddress with addressId and bearerToken as argument
         AddressEntity deletedAddress = addressService.deleteAddress(addressUuid, bearerToken[1]);
 
         // Loads the DeleteAddressResponse with uuid of the address and the respective status message
-        DeleteAddressResponse deleteAddressResponse = new DeleteAddressResponse().id(UUID.fromString(deletedAddress.getUuid()))
+        DeleteAddressResponse deleteAddressResponse = new DeleteAddressResponse().id(UUID.fromString(address.getUuid()))
                 .status("ADDRESS DELETED SUCCESSFULLY");
 
         // Returns the DeleteAddressResponse with OK http status

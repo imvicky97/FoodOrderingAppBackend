@@ -84,7 +84,7 @@ public class AddressEntity {
     }
 
     public String getUuid() {
-        return uuid.toString();
+        return uuid;
     }
 
     public void setUuid(String uuid) {
