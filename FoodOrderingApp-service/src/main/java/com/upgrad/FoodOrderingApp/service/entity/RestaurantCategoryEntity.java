@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "restaurant_category")
 @NamedQueries(
         {
-                @NamedQuery(name = "getCategoryByRestaurant", query = "select rc from RestaurantCategoryEntity rc where rc.restaurant =:restaurantId"),
+                @NamedQuery(name = "getCategoriesByRestaurant", query = "select rc from RestaurantCategoryEntity rc where rc.restaurant =:restaurantId"),
                 @NamedQuery(name = "getRestaurantsByCategory", query = "select rc from RestaurantCategoryEntity rc where rc.categoryId =:categoryId")
         }
 )

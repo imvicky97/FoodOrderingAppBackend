@@ -95,7 +95,7 @@ public class AddressEntity {
         return flatBuildingName;
     }
 
-    public void setFlatBuilNumber(String flatBuilNumber) {
+    public void setFlatBuilNo(String flatBuilNumber) {
         this.flatBuildingName = flatBuilNumber;
     }
 

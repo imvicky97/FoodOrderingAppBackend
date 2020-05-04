@@ -60,7 +60,7 @@ public class RestaurantController {
 
     @GetMapping(path = "/restaurant/name/{reastaurant_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByName(@PathVariable("reastaurant_name") final String restaurantName) throws RestaurantNotFoundException {
-        List<RestaurantEntity> restaurantEntityList = restaurantService.getRestaurantByRestaurantName(restaurantName);
+        List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantsByName(restaurantName);
 
         RestaurantListResponse listResponse = new RestaurantListResponse();
 
@@ -75,7 +75,7 @@ public class RestaurantController {
 
     @GetMapping(path = "/restaurant/category/{category_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByCategoryId(@PathVariable("category_id") final String categoryId) throws CategoryNotFoundException, RestaurantNotFoundException {
-        List<RestaurantEntity> restaurantEntityList = restaurantService.getRestaurantsByCategory(categoryId);
+        List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantByCategory(categoryId);
 
         RestaurantListResponse restaurantResponseList = new RestaurantListResponse();
 
