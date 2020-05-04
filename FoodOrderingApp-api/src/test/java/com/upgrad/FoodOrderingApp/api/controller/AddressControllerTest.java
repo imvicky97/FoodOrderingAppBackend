@@ -22,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import static junit.framework.TestCase.assertEquals;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -197,7 +198,7 @@ public class AddressControllerTest {
         final AddressEntity deletedAddressEntity = new AddressEntity();
         final String uuid = UUID.randomUUID().toString();
         deletedAddressEntity.setUuid(uuid);
-        when(mockAddressService.deleteAddress(addressEntity)).thenReturn(deletedAddressEntity);
+        when(mockAddressService.deleteAddress("82849cd5-106e-4b34-b9bf-94954c6ff527", addressEntity.toString())).thenReturn(deletedAddressEntity);
 
         mockMvc
                 .perform(delete("/address/82849cd5-106e-4b34-b9bf-94954c6ff527")
@@ -209,7 +210,7 @@ public class AddressControllerTest {
                 .andExpect(jsonPath("status").value("ADDRESS DELETED SUCCESSFULLY"));
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
         verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
-        verify(mockAddressService, times(1)).deleteAddress(addressEntity);
+        verify(mockAddressService, times(1)).deleteAddress("82849cd5-106e-4b34-b9bf-94954c6ff527", addressEntity.toString());
     }
 
     //This test case passes when you have handled the exception of trying to delete an address with non existing access-token.
@@ -226,7 +227,7 @@ public class AddressControllerTest {
                 .andExpect(jsonPath("code").value("ATHR-001"));
         verify(mockCustomerService, times(1)).getCustomer("non_existing_access_token");
         verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
-        verify(mockAddressService, times(0)).deleteAddress(any());
+        verify(mockAddressService, times(0)).deleteAddress(anyString(), any());
     }
 
     //This test case passes when you have handled the exception of trying to delete an address with a signed out user.
@@ -243,7 +244,7 @@ public class AddressControllerTest {
                 .andExpect(jsonPath("code").value("ATHR-002"));
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken");
         verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
-        verify(mockAddressService, times(0)).deleteAddress(any());
+        verify(mockAddressService, times(0)).deleteAddress(anyString(), any());
     }
 
     //This test case passes when you have handled the exception of trying to delete an address with expired session user.
@@ -260,7 +261,7 @@ public class AddressControllerTest {
                 .andExpect(jsonPath("code").value("ATHR-003"));
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken1");
         verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
-        verify(mockAddressService, times(0)).deleteAddress(any());
+        verify(mockAddressService, times(0)).deleteAddress(anyString(), any());
     }
 
     //This test case passes when you have handled the exception of trying to delete an address with by providing an
@@ -281,7 +282,7 @@ public class AddressControllerTest {
                 .andExpect(jsonPath("code").value("ANF-003"));
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
         verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
-        verify(mockAddressService, times(0)).deleteAddress(any());
+        verify(mockAddressService, times(0)).deleteAddress(anyString(), any());
     }
 
     //This test case passes when you have handled the exception of trying to delete an address of a different customer
@@ -302,7 +303,7 @@ public class AddressControllerTest {
                 .andExpect(jsonPath("code").value("ATHR-004"));
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
         verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
-        verify(mockAddressService, times(0)).deleteAddress(any());
+        verify(mockAddressService, times(0)).deleteAddress(anyString(), any());
     }
 
     // ------------------------------------------ GET /address/customer ------------------------------------------
@@ -322,7 +323,7 @@ public class AddressControllerTest {
         addressEntity.setFlatBuilNo("flatBuildNo");
         final String stateUuid = UUID.randomUUID().toString();
         addressEntity.setState(new StateEntity(stateUuid, "state"));
-        when(mockAddressService.getAllAddress(customerEntity)).thenReturn(Collections.singletonList(addressEntity));
+        when(mockAddressService.getAllAddress(customerEntity.toString())).thenReturn(Collections.singletonList(addressEntity));
 
         final String response = mockMvc
                 .perform(get("/address/customer")
@@ -335,6 +336,7 @@ public class AddressControllerTest {
         assertEquals(addressLists.getAddresses().size(), 1);
 
         final AddressList addressList = addressLists.getAddresses().get(0);
+
         assertEquals(addressList.getFlatBuildingName(), "flatBuildNo");
         assertEquals(addressList.getLocality(), "locality");
         assertEquals(addressList.getPincode(), "100000");
@@ -344,7 +346,7 @@ public class AddressControllerTest {
         assertEquals(addressList.getId().toString(), addressUuid);
 
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-        verify(mockAddressService, times(1)).getAllAddress(customerEntity);
+        verify(mockAddressService, times(1)).getAllAddress(customerEntity.toString());
     }
 
     //This test case passes when you have handled the exception of trying to fetch addresses for any customer with non existing access-token.
