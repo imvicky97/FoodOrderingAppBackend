@@ -35,7 +35,7 @@ public class AddressService {
     private StateDao stateDao;
 
     @Autowired
-    private CustomerAdminBusinessService customerAdminBusinessService;
+    private CustomerService customerService;
 
     @Transactional
     public AddressEntity getAddressById(final Long addressId) {
@@ -47,6 +47,11 @@ public class AddressService {
         return addressDao.getAddressByUuid(addressUuid);
     }
 
+
+    public CustomerAddressEntity getCustAddressByCustIdAddressId(CustomerAuthTokenEntity customerAuthTokenEntity, AddressEntity addressEntity) {
+        return customerAddressDao.getCustAddressByCustIdAddressId(customerAuthTokenEntity.getCustomer(), addressEntity);
+
+    }
 
     @Transactional
     public StateEntity getStateByUUID(String stateUuid) throws SaveAddressException, AddressNotFoundException {
@@ -70,23 +75,18 @@ public class AddressService {
     public AddressEntity saveAddress(AddressEntity addressEntity, String bearerToken)
             throws AuthorizationFailedException, SaveAddressException, AddressNotFoundException {
 
-        customerAdminBusinessService.validateAccessToken(bearerToken);
+        customerService.validateAccessToken(bearerToken);
 
         getStateByUUID(addressEntity.getState().getUuid());
 
         if (addressEntity.getCity() == null || addressEntity.getCity().isEmpty() ||
                 addressEntity.getState() == null ||
-                //addressEntity.getState() == null ||
                 addressEntity.getFlatBuilNumber() == null || addressEntity.getFlatBuilNumber().isEmpty() ||
                 addressEntity.getLocality() == null || addressEntity.getLocality().isEmpty() ||
                 addressEntity.getPincode() == null || addressEntity.getPincode().isEmpty() ||
                 addressEntity.getUuid() == null || addressEntity.getUuid().isEmpty()) {
             throw new SaveAddressException("SAR-001", "No field can be empty.");
         }
-
-        /*if (stateDao.getStateByUuid(addressEntity.getState().getUuid()) == null) {
-            throw new AddressNotFoundException("ANF-002", "No state by this id");
-        }*/
 
         if (stateDao.getStateById(addressEntity.getState().getId()) == null) {
             throw new AddressNotFoundException("ANF-002", "No state by this id.");
@@ -114,23 +114,15 @@ public class AddressService {
 
 
     @Transactional
-    public AddressEntity deleteAddress(String addressUuid, String bearerToken)
+    public AddressEntity deleteAddress(String addressUuid, AddressEntity addressEntity)
             throws AuthorizationFailedException, AddressNotFoundException {
-
-        customerAdminBusinessService.validateAccessToken(bearerToken);
-        CustomerAuthTokenEntity customerAuthTokenEntity = customerAdminBusinessService.getCustomerAuthToken(bearerToken);
 
         if (addressUuid == null) {
             throw new AddressNotFoundException("ANF-005", "Address id can not be empty.");
         }
 
-        AddressEntity addressEntity = addressDao.getAddressByUuid(addressUuid);
-        CustomerAddressEntity customerAddressEntity = customerAddressDao.getCustAddressByCustIdAddressId(customerAuthTokenEntity.getCustomer(), addressEntity);
-
         if (addressEntity == null) {
             throw new AddressNotFoundException("ANF-003", "No address by this id.");
-        } else if (customerAddressEntity == null) {
-            throw new AuthorizationFailedException("ATHR-004", "You are not authorized to view/update/delete any one else's address");
         }
 
         return addressDao.deleteAddressByUuid(addressEntity);
@@ -156,8 +148,7 @@ public class AddressService {
 
     }
 
-    public List<StateEntity> getAllStates() throws AuthorizationFailedException {
-        //customerAdminBusinessService.validateAccessToken(bearerToken);
+    public List<StateEntity> getAllStates() {
         return stateDao.getAllStates();
     }
 

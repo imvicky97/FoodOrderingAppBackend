@@ -27,7 +27,7 @@ public class CategoryDao {
 
     public List<CategoryItemEntity> getItemByCategoryId(CategoryEntity categoryEntity) {
         try {
-            return entityManager.createNamedQuery("getItemByCategoryId", CategoryItemEntity.class).setParameter("categoryId", categoryEntity).getResultList();
+            return entityManager.createNamedQuery("getItemsByCategory", CategoryItemEntity.class).setParameter("categoryId", categoryEntity).getResultList();
         } catch (NoResultException nre) {
             return null;
         }

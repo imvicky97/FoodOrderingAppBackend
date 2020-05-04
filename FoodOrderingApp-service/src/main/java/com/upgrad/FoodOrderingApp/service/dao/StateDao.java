@@ -18,7 +18,7 @@ public class StateDao {
         try {
             return entityManager.createNamedQuery("stateById", StateEntity.class).setParameter("id", stateId)
                     .getSingleResult();
-        } catch(NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }
@@ -27,7 +27,7 @@ public class StateDao {
         try {
             return entityManager.createNamedQuery("stateByUuid", StateEntity.class).setParameter("uuid", stateUuid)
                     .getSingleResult();
-        } catch(NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         }
     }

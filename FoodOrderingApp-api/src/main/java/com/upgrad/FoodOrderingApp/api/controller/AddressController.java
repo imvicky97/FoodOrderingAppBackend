@@ -9,9 +9,9 @@ import com.upgrad.FoodOrderingApp.api.model.SaveAddressResponse;
 import com.upgrad.FoodOrderingApp.api.model.StatesList;
 import com.upgrad.FoodOrderingApp.api.model.StatesListResponse;
 import com.upgrad.FoodOrderingApp.service.businness.AddressService;
-import com.upgrad.FoodOrderingApp.service.businness.CustomerAdminBusinessService;
 import com.upgrad.FoodOrderingApp.service.businness.CustomerService;
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthTokenEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.entity.StateEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AddressNotFoundException;
@@ -41,9 +41,6 @@ public class AddressController {
 
     @Autowired
     private AddressService addressService;
-
-    @Autowired
-    private CustomerAdminBusinessService customerAdminBusinessService;
 
     @Autowired
     private CustomerService customerService;
@@ -130,9 +127,14 @@ public class AddressController {
 
         CustomerEntity customer = customerService.getCustomer(bearerToken[1]);
 
+        CustomerAuthTokenEntity customerAuthTokenEntity = customerService.getCustomerAuthToken(bearerToken[1]);
+
         AddressEntity address = addressService.getAddressByUUID(addressUuid, customer);
+
+        addressService.getCustAddressByCustIdAddressId(customerAuthTokenEntity, address);
+
         // Calls the deleteAddress with addressId and bearerToken as argument
-        AddressEntity deletedAddress = addressService.deleteAddress(addressUuid, bearerToken[1]);
+        AddressEntity deletedAddress = addressService.deleteAddress(addressUuid, address);
 
         // Loads the DeleteAddressResponse with uuid of the address and the respective status message
         DeleteAddressResponse deleteAddressResponse = new DeleteAddressResponse().id(UUID.fromString(deletedAddress.getUuid()))

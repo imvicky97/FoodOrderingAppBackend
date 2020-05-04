@@ -30,7 +30,8 @@ public class PaymentEntity {
     @Column(name = "payment_name")
     private String paymentName;
 
-    public PaymentEntity() {}
+    public PaymentEntity() {
+    }
 
     public PaymentEntity(String paymentId, String paymentName) {
         this.uuid = paymentId;
