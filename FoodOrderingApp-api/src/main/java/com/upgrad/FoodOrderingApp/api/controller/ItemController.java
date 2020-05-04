@@ -29,6 +29,7 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
+    // Get Popular items in restaurant
     @GetMapping(path = "/item/restaurant/{restaurant_id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ItemListResponse> getPopularItems(@PathVariable("restaurant_id") String restaurantId) throws RestaurantNotFoundException {
 

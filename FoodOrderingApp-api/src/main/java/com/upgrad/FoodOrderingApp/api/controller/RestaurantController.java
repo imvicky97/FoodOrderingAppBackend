@@ -46,6 +46,7 @@ public class RestaurantController {
     private CustomerService customerService;
 
 
+    // Get all restaurants
     @GetMapping(path = "/restaurant", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getAllRestaurants() throws RestaurantNotFoundException {
 
@@ -58,6 +59,7 @@ public class RestaurantController {
         return new ResponseEntity<>(listResponse, HttpStatus.OK);
     }
 
+    // Get restaurants by name
     @GetMapping(path = "/restaurant/name/{reastaurant_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByName(@PathVariable("reastaurant_name") final String restaurantName) throws RestaurantNotFoundException {
         List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantsByName(restaurantName);
@@ -73,6 +75,7 @@ public class RestaurantController {
         }
     }
 
+    // Get restaurants by category
     @GetMapping(path = "/restaurant/category/{category_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByCategoryId(@PathVariable("category_id") final String categoryId) throws CategoryNotFoundException, RestaurantNotFoundException {
         List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantByCategory(categoryId);
@@ -89,6 +92,7 @@ public class RestaurantController {
         return new ResponseEntity<>(restaurantResponseList, HttpStatus.OK);
     }
 
+    // Get Restaurant by id
     @GetMapping(path = "/restaurant/{restaurant_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantDetailsResponse> getRestaurantByRestaurantId(@PathVariable("restaurant_id") final String restaurant_id) throws RestaurantNotFoundException {
 
@@ -137,6 +141,7 @@ public class RestaurantController {
         return new ResponseEntity(restaurantResponseList, HttpStatus.OK);
     }
 
+    // Update restaurant details
     @PutMapping(path = "/restaurant/{restaurant_id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@PathVariable("restaurant_id") final String restaurantId, @RequestHeader("authorization") final String authorization,
                                                                              @RequestParam("customerRating") final Double customerRating) throws AuthorizationFailedException, RestaurantNotFoundException, InvalidRatingException {
