@@ -66,7 +66,7 @@ public class AddressEntity {
     }
 
     public void setUuid(String uuid) {
-        this.uuid = uuid;
+        this.uuid = UUID.fromString(uuid);
     }
 
     public String getFlatBuilNumber() {

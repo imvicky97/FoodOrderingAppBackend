@@ -132,7 +132,7 @@ public class AddressService {
         return addressDao.deleteAddressByUuid(addressEntity);
     }
 
-    public List<AddressEntity> getAllAddress(final CustomerEntity bearerToken) throws AuthorizationFailedException {
+    public List<AddressEntity> getAllAddress(final String bearerToken) throws AuthorizationFailedException {
 
         customerAdminBusinessService.validateAccessToken(bearerToken);
 
