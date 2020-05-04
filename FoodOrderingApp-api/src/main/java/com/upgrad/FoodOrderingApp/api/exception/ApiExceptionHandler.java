@@ -80,7 +80,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorResponse> updateCustomerException(UpdateCustomerException ex, WebRequest webReq) {
         return new ResponseEntity<>(
                 new ErrorResponse().code(ex.getCode()).message(ex.getErrorMessage()),
-                HttpStatus.BAD_REQUEST
+                HttpStatus.FORBIDDEN
         );
     }
 
@@ -88,7 +88,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorResponse> invalidRatingException(InvalidRatingException ex, WebRequest webReq) {
         return new ResponseEntity<>(
                 new ErrorResponse().code(ex.getCode()).message(ex.getErrorMessage()),
-                HttpStatus.NOT_ACCEPTABLE
+                HttpStatus.BAD_REQUEST
         );
     }
 
