@@ -22,16 +22,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import static junit.framework.TestCase.assertEquals;
 
 import java.util.Collections;
 import java.util.UUID;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -323,7 +327,7 @@ public class AddressControllerTest {
         addressEntity.setFlatBuilNo("flatBuildNo");
         final String stateUuid = UUID.randomUUID().toString();
         addressEntity.setState(new StateEntity(stateUuid, "state"));
-        when(mockAddressService.getAllAddress(customerEntity.toString())).thenReturn(Collections.singletonList(addressEntity));
+        when(mockAddressService.getAllAddress(customerEntity)).thenReturn(Collections.singletonList(addressEntity));
 
         final String response = mockMvc
                 .perform(get("/address/customer")
@@ -346,7 +350,7 @@ public class AddressControllerTest {
         assertEquals(addressList.getId().toString(), addressUuid);
 
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-        verify(mockAddressService, times(1)).getAllAddress(customerEntity.toString());
+        verify(mockAddressService, times(1)).getAllAddress(customerEntity);
     }
 
     //This test case passes when you have handled the exception of trying to fetch addresses for any customer with non existing access-token.

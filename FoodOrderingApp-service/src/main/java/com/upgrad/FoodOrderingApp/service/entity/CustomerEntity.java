@@ -18,16 +18,13 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "customer")
-
 @NamedQueries({
         @NamedQuery(name = "getCustomerByContactNumber", query = "select u from CustomerEntity u where  u.contact_number = :contact_number"),
         @NamedQuery(name = "getCustomerByUUID", query = "select u from CustomerEntity u where  u.uuid = :uuid"),
         @NamedQuery(name = "getCustomerByEmail", query = "select ce from CustomerEntity ce where ce.email_address =:email")
-
-
 })
 
-public class CustomerEntity  implements  Serializable{
+public class CustomerEntity implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -44,7 +41,7 @@ public class CustomerEntity  implements  Serializable{
     private String first_name;
 
     @Column(name = "lastname")
-  //  @NotNull
+    //  @NotNull
     @Size(max = 30)
     private String last_name;
 
@@ -87,9 +84,11 @@ public class CustomerEntity  implements  Serializable{
     public String getFirstName() {
         return first_name;
     }
+
     public void setFirstName(String first_name) {
         this.first_name = first_name;
     }
+
     public String getLastName() {
         return last_name;
     }
@@ -97,6 +96,7 @@ public class CustomerEntity  implements  Serializable{
     public void setLastName(String last_name) {
         this.last_name = last_name;
     }
+
     public String getEmail() {
         return email_address;
     }
@@ -132,11 +132,6 @@ public class CustomerEntity  implements  Serializable{
     @Override
     public boolean equals(Object obj) {
         return new EqualsBuilder().append(this, obj).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(this).hashCode();
     }
 
 //    @Override
