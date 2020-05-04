@@ -24,4 +24,17 @@ public class OrderItemDao {
             return null;
         }
     }
+
+    public OrderItemEntity saveOrderItem(OrderItemEntity orderItemEntity) {
+        entityManager.persist(orderItemEntity);
+        return orderItemEntity;
+    }
+
+    public List<OrderItemEntity> getOrderItemsByOrder(OrderEntity ordersEntity) {
+        try {
+            return entityManager.createNamedQuery("getOrderItemsByOrder", OrderItemEntity.class).setParameter("orders", ordersEntity).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 }

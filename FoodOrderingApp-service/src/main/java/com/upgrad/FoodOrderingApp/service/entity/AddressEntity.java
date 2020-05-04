@@ -3,7 +3,16 @@ package com.upgrad.FoodOrderingApp.service.entity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.UUID;
@@ -53,6 +62,19 @@ public class AddressEntity {
     @Column(name = "active")
     private Integer active;
 
+    public AddressEntity() {}
+
+    public AddressEntity(String uuid, String flatBuildingName, String locality, String city, String pincode, StateEntity stateEntity) {
+
+        this.uuid = UUID.fromString(uuid);
+        this.flatBuildingName = flatBuildingName;
+        this.locality = locality;
+        this.city = city;
+        this.pincode = pincode;
+        this.state = stateEntity;
+
+    }
+
     public Long getId() {
         return Long.valueOf(id);
     }
@@ -66,7 +88,7 @@ public class AddressEntity {
     }
 
     public void setUuid(String uuid) {
-        this.uuid = uuid;
+        this.uuid = UUID.fromString(uuid);
     }
 
     public String getFlatBuilNumber() {

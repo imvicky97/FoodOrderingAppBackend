@@ -43,7 +43,7 @@ public class AddressController {
         // Adds all the address attributes provided to the address entity
         AddressEntity addressEntity = new AddressEntity();
         addressEntity.setCity(saveAddressRequest.getCity());
-        addressEntity.setFlatBuildingNumber(saveAddressRequest.getFlatBuildingName());
+        addressEntity.setFlatBuilNumber(saveAddressRequest.getFlatBuildingName());
         addressEntity.setLocality(saveAddressRequest.getLocality());
         addressEntity.setPincode(saveAddressRequest.getPincode());
         addressEntity.setState(addressService.getStateByUUID(saveAddressRequest.getStateUuid()));
@@ -88,7 +88,7 @@ public class AddressController {
 
             // Adds the city, flat building name, locality, pincode and state to the addressList
             AddressList addressList = new AddressList().id(UUID.fromString(ae.getUuid())).city(ae.getCity())
-                    .flatBuildingName(ae.getFlatBuildingNumber()).locality(ae.getLocality())
+                    .flatBuildingName(ae.getFlatBuilNumber()).locality(ae.getLocality())
                     .pincode(ae.getPincode()).state(addressListState);
 
             // Adds the addressList to addressListResponse

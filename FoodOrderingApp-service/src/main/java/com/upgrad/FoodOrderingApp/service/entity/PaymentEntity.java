@@ -13,7 +13,8 @@ import javax.persistence.Table;
 @Table(name = "payment")
 @NamedQueries(
         {
-                @NamedQuery(name = "getAllPaymentMethods", query = "select p from PaymentEntity p")
+                @NamedQuery(name = "getAllPaymentMethods", query = "select p from PaymentEntity p"),
+                @NamedQuery(name = "getPaymentByUUID", query = "select p from PaymentEntity p where p.uuid=:uuid"),
         }
 )
 public class PaymentEntity {
@@ -28,6 +29,13 @@ public class PaymentEntity {
 
     @Column(name = "payment_name")
     private String paymentName;
+
+    public PaymentEntity() {}
+
+    public PaymentEntity(String paymentId, String paymentName) {
+        this.uuid = paymentId;
+        this.paymentName = paymentName;
+    }
 
     public Integer getId() {
         return id;

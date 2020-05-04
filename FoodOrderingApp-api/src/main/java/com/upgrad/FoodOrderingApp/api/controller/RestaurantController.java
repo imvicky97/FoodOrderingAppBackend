@@ -100,7 +100,7 @@ public class RestaurantController {
         restaurantDetailsResponseAddressState.setStateName(restaurantEntity.getAddress().getState().getStateName());
 
         RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress();
-        restaurantDetailsResponseAddress.setId(restaurantEntity.getAddress().getUuid());
+        restaurantDetailsResponseAddress.setId(UUID.fromString(restaurantEntity.getAddress().getUuid()));
         restaurantDetailsResponseAddress.setFlatBuildingName(restaurantEntity.getAddress().getFlatBuilNumber());
         restaurantDetailsResponseAddress.setLocality(restaurantEntity.getAddress().getLocality());
         restaurantDetailsResponseAddress.setCity(restaurantEntity.getAddress().getCity());
@@ -173,7 +173,7 @@ public class RestaurantController {
             restaurantDetailsResponseAddressState.setStateName(restaurantEntity.getAddress().getState().getStateName());
 
             RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress();
-            restaurantDetailsResponseAddress.setId(restaurantEntity.getAddress().getUuid());
+            restaurantDetailsResponseAddress.setId(UUID.fromString(restaurantEntity.getAddress().getUuid()));
             restaurantDetailsResponseAddress.setFlatBuildingName(restaurantEntity.getAddress().getFlatBuilNumber());
             restaurantDetailsResponseAddress.setLocality(restaurantEntity.getAddress().getLocality());
             restaurantDetailsResponseAddress.setCity(restaurantEntity.getAddress().getCity());
