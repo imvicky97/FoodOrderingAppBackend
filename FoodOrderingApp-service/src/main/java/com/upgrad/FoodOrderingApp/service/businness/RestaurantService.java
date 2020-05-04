@@ -48,7 +48,7 @@ public class RestaurantService {
         return restaurantEntity;
     }
 
-    public List<RestaurantCategoryEntity> getCategoryByRestaurant(RestaurantEntity restaurantEntity) throws RestaurantNotFoundException {
+    public List<RestaurantCategoryEntity> getCategoriesByRestaurant(RestaurantEntity restaurantEntity) throws RestaurantNotFoundException {
 
         List<RestaurantCategoryEntity> restaurantCategoryEntity = restaurantDao.getCategoryByRestaurant(restaurantEntity);
         return restaurantCategoryEntity;
