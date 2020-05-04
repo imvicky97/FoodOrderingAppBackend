@@ -4,7 +4,11 @@ import com.upgrad.FoodOrderingApp.service.dao.AddressDao;
 import com.upgrad.FoodOrderingApp.service.dao.CustomerAddressDao;
 import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
 import com.upgrad.FoodOrderingApp.service.dao.StateDao;
-import com.upgrad.FoodOrderingApp.service.entity.*;
+import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerAddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthTokenEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
+import com.upgrad.FoodOrderingApp.service.entity.StateEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AddressNotFoundException;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SaveAddressException;
@@ -38,7 +42,7 @@ public class AddressService {
     }
 
     @Transactional
-    public AddressEntity getAddressByUuid(final String addressUuid, CustomerEntity customerEntity) {
+    public AddressEntity getAddressByUUID(final String addressUuid, CustomerEntity customerEntity) throws AuthorizationFailedException, AddressNotFoundException {
         return addressDao.getAddressByUuid(addressUuid);
     }
 
@@ -46,10 +50,9 @@ public class AddressService {
     @Transactional
     public StateEntity getStateByUUID(String stateUuid) throws SaveAddressException, AddressNotFoundException {
         StateEntity stateEntity = stateDao.getStateByUuid(stateUuid);
-        if(stateUuid.isEmpty()){
+        if (stateUuid.isEmpty()) {
             throw new SaveAddressException("SAR-001", "No field can be empty");
-        }
-        else if(stateEntity == null){
+        } else if (stateEntity == null) {
             throw new AddressNotFoundException("ANF-002", "No state by this id");
         } else {
             return stateEntity;

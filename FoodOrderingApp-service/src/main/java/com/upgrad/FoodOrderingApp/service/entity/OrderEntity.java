@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 //This Class represents the Orders table in the DB
 
@@ -53,7 +54,7 @@ public class OrderEntity implements Serializable {
 
     @Column(name = "date")
     @NotNull
-    private Timestamp date;
+    private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_id")
@@ -75,6 +76,18 @@ public class OrderEntity implements Serializable {
     private RestaurantEntity restaurant;
 
     public OrderEntity() {
+    }
+
+    public OrderEntity(String orderId, Double bill, CouponEntity couponEntity, double discount, Date orderDate, PaymentEntity paymentEntity, CustomerEntity customerEntity, AddressEntity addressEntity, RestaurantEntity restaurantEntity) {
+        this.uuid = orderId;
+        this.bill = bill;
+        this.coupon = couponEntity;
+        this.discount = discount;
+        this.date = orderDate;
+        this.payment = paymentEntity;
+        this.customer = customerEntity;
+        this.address = addressEntity;
+        this.restaurant = restaurantEntity;
     }
 
     public Integer getId() {
@@ -117,7 +130,7 @@ public class OrderEntity implements Serializable {
         this.discount = discount;
     }
 
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 

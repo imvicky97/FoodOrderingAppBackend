@@ -5,6 +5,7 @@ import com.upgrad.FoodOrderingApp.service.dao.CustomerDao;
 import com.upgrad.FoodOrderingApp.service.dao.OrderDao;
 import com.upgrad.FoodOrderingApp.service.dao.OrderItemDao;
 import com.upgrad.FoodOrderingApp.service.entity.CouponEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
 import com.upgrad.FoodOrderingApp.service.entity.OrderItemEntity;
 import com.upgrad.FoodOrderingApp.service.exception.CouponNotFoundException;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -61,6 +64,30 @@ public class OrderService {
         return couponEntity;
     }
 
+    /* This method is to get Orders By Customers.Takes the customerUuid  and returns the list of OrdersEntity .
+   If error throws exception with error code and error message.
+   */
+    public List<OrderEntity> getOrdersByCustomers(String customerUuid) {
+
+        //calls getCustomerByUuid to get customer from the DB.
+        CustomerEntity customerEntity = customerDao.getCustomerByUuid(customerUuid);
+
+        //Calls getOrdersByCustomers or OrderDao to get the past order list of the customer.
+        List<OrderEntity> ordersEntities = orderDao.getOrdersByCustomers(customerEntity);
+        return ordersEntities;
+    }
+
+    /* This method is to get Order Items By Order.Takes the ordersEntity  and returns the list of OrderItemEntity .
+    If error throws exception with error code and error message.
+    */
+    public List<OrderItemEntity> getOrderItemsByOrder(OrderEntity ordersEntity) {
+
+        //Calls getOrderItemsByOrder of orderItemDao to return list of OrderItemEntity corresponding to the order.
+        List<OrderItemEntity> orderItemEntities = orderItemDao.getOrderItemsByOrder(ordersEntity);
+        return orderItemEntities;
+    }
+
+
     /* This method is to saveOrder.Takes the OrdersEntity  and saves it to DB and returns saved the Coupon Entity.
     If error throws exception with error code and error message.
     */
@@ -80,8 +107,7 @@ public class OrderService {
     public OrderItemEntity saveOrderItem(OrderItemEntity orderItemEntity) {
 
         //Calls saveOrderItem of orderItemDao to save the OrderItemEntity.
-        OrderItemEntity savedOrderItemEntity = orderItemDao.saveOrderItem(orderItemEntity);
-        return savedOrderItemEntity;
+        return orderItemDao.saveOrderItem(orderItemEntity);
     }
 
 }
