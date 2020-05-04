@@ -167,7 +167,7 @@ public class CustomerService {
     public CustomerEntity updateCustomerPassword(String oldPwd, String newPwd, CustomerEntity customerEntity) throws UpdateCustomerException {
 
         final String encryptedPassword = passwordCryptographyProvider.encrypt(oldPwd, customerEntity.getSalt());
-        CustomerEntity updatedCustomerEntity = customerDao.getCustomerById(customerEntity.getUuid());
+        CustomerEntity updatedCustomerEntity = customerDao.getCustomerById(Integer.valueOf(customerEntity.getUuid()));
         if (encryptedPassword.equals(updatedCustomerEntity.getPassword())) {
             if(!isPasswordString(newPwd)) {
                 throw new UpdateCustomerException("UCR-001","Weak password!");
